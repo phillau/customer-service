@@ -6,8 +6,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/js/mq.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/js/ptloginout.js"></script>
+    <%--<script type="text/javascript" src="${pageContext.request.contextPath }/js/mq.js"></script>--%>
+    <%--<script type="text/javascript" src="${pageContext.request.contextPath }/js/ptloginout.js"></script>--%>
     <script src="${pageContext.request.contextPath }/js/jquery.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/css/mq.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/layui/css/layui.css">
