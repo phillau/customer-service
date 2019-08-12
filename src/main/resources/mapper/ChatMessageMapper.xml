@@ -23,7 +23,9 @@
     send_user_id, accept_user_id, msg
     from chat_message
     where
-    send_user_id = #{customerId} or accept_user_id = #{customerId}
+    (send_user_id = #{customerId} or accept_user_id = #{customerId})
+    and
+    DATE_SUB(CURDATE(), INTERVAL 3 DAY) <![CDATA[<=]]> date(create_time)
     order by
     create_time
   </select>
