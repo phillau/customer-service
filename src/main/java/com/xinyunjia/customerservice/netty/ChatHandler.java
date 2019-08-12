@@ -100,7 +100,12 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             ChatMsg chatMsg = dataContent.getChatMsg();
             String receiverId = chatMsg.getReceiverId();
             String senderId = chatMsg.getSenderId();
-            AppUtil.sendTextMessage(senderId,receiverId, chatMsg.getMsg());
+
+            // 保存消息到数据库，并且标记为 未签收
+            ChatMessageService chatMessageService = (ChatMessageService) SpringUtil.getBean("chatMessageService");
+            chatMessageService.saveMsg(chatMsg);
+
+//            AppUtil.sendTextMessage(senderId,receiverId, chatMsg.getMsg());
         } else if (action.equals(MsgActionEnum.SIGNED.type)) {
             // 2.3  签收消息类型，针对具体的消息进行签收，修改数据库中对应消息的签收状态[已签收]
             ChatMessageService chatMessageService = (ChatMessageService) SpringUtil.getBean("chatMessageService");

@@ -3,8 +3,12 @@ package com.xinyunjia.customerservice.controller;
 import com.xinyunjia.customerservice.memory.ChatMemoryStore;
 import com.xinyunjia.customerservice.entity.Message;
 import com.xinyunjia.customerservice.entity.UserInfo;
+import com.xinyunjia.customerservice.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,57 +17,60 @@ import java.util.Map;
 
 @Controller
 public class loginController {
-	/**
-	 * 保存客户列表
-	 */
-	@RequestMapping("/index")
-	public String index(){
-		return "login";
-	}
 
-	@RequestMapping("/login")
-	public String login(UserInfo user,HttpServletRequest req){
-		/**
-		 * 1、获取和所有客户的会话列表，按照时间排序，并存入usersMap中
-		 * 2、
-//		 */
-//		Map<String, UserInfo> map = new HashMap<>();
-//		UserInfo userInfo = new UserInfo();
-//		userInfo.setId(1);
-//		userInfo.setName("kehu1");
-//		userInfo.setLoginTime(System.currentTimeMillis()+"");
-//		ArrayList<Message> list = new ArrayList<>();
-//		Message message = new Message();
-//		message.setFromName("fromName1");
-//		message.setToName("toName1");
-//		message.setMessageId(1);
-//		message.setMessageText("这是一条消息");
-//		list.add(message);
-//		userInfo.setMegs(list);
-//		map.put(userInfo.getName(),userInfo);
-////		ChatMemoryStore.userMap.put(user.getName(),map);
-//
-//		userInfo = new UserInfo();
-//		userInfo.setId(2);
-//		userInfo.setName("kehu2");
-//		userInfo.setLoginTime(System.currentTimeMillis()+"");
-//		list = new ArrayList<>();
-//		message = new Message();
-//		message.setFromName("fromName2");
-//		message.setToName("toName2");
-//		message.setMessageId(2);
-//		message.setMessageText("这是一条消息");
-//		list.add(message);
-//		userInfo.setMegs(list);
-//		map.put(userInfo.getName(),userInfo);
-//		ChatMemoryStore.userMap.put(user.getName(),map);
+    @Autowired
+    private LoginService loginService;
 
-		user.setId("customer_service");
-		if(ChatMemoryStore.userMap.get(user.getId())==null){
-			ChatMemoryStore.userMap.put(user.getId(),new HashMap<>());
-		}
-		req.getSession().setAttribute("user", user);
-		req.getSession().setAttribute("usersMap", ChatMemoryStore.userMap.get(user.getId()));
-		return "main";
-	}
+    /**
+     * 登录页
+     */
+    @RequestMapping("/index")
+    public String index() {
+        return "login";
+    }
+
+    /**
+     * 点击登录
+     * @param userInfo
+     * @param attr
+     * @return
+     */
+    @RequestMapping("/login")
+    public String login(UserInfo userInfo, RedirectAttributes attr) {
+        boolean check = loginService.check(userInfo);
+        if (check) {
+            attr.addAttribute("id", userInfo.getId());
+            attr.addAttribute("name", userInfo.getName());
+            return "redirect:/chatting";
+        } else {
+            return "login";
+        }
+    }
+
+    /**
+     * 用于加载聊天会话和客户列表
+     *
+     * @param userInfo
+     * @param req
+     * @return
+     */
+    @RequestMapping("/chatting")
+    public String chatting(UserInfo userInfo, HttpServletRequest req) {
+        /**
+         * 1、获取和所有客户的会话列表，按照时间排序，并存入usersMap中
+         * 2、
+         */
+        if (ChatMemoryStore.userMap.get(userInfo.getId()) == null) {
+            ChatMemoryStore.userMap.put(userInfo.getId(), new HashMap<>());
+        }
+        /**
+         * 保存当前登录客服
+         */
+        req.getSession().setAttribute("user", userInfo);
+        /**
+         * 保存用户会话列表
+         */
+        req.getSession().setAttribute("usersMap", ChatMemoryStore.userMap.get(userInfo.getId()));
+        return "main";
+    }
 }

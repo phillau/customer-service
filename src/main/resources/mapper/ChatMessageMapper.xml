@@ -18,6 +18,15 @@
     from chat_message
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="string">
+    select
+    send_user_id, accept_user_id, msg
+    from chat_message
+    where
+    send_user_id = #{customerId} or accept_user_id = #{customerId}
+    order by
+    create_time
+  </select>
   <insert id="insert" parameterType="com.xinyunjia.customerservice.model.ChatMessage" >
     insert into chat_message (id, send_user_id, accept_user_id, 
       msg, sign_flag, create_time

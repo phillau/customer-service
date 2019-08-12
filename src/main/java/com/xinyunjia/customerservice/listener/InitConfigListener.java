@@ -11,7 +11,7 @@ public class InitConfigListener implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (event.getApplicationContext().getParent() == null) {
             try {
-                System.err.println("监听器执行啦");
+                System.err.println("初始化和im服务器的连接地址");
                 ChatConfig.initAdmin("http://localhost:18080", "123456");
             } catch (Exception e) {
                 e.printStackTrace();

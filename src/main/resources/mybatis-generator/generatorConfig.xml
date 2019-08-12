@@ -42,7 +42,7 @@
 		</javaClientGenerator>
 
 		<!-- 数据库->实体映射配置,table标签可以配置多个 -->
-		<table tableName="chat_message" domainObjectName="ChatMessage"
+		<table tableName="t_user" domainObjectName="Users"
 			enableDeleteByPrimaryKey="false" enableSelectByPrimaryKey="true"
 			enableUpdateByPrimaryKey="true" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"

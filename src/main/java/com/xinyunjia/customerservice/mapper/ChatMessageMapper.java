@@ -16,4 +16,6 @@ public interface ChatMessageMapper {
     int updateByPrimaryKey(ChatMessage record);
 
     void batchUpdateMsgSigned(List<String> msgIdList);
+
+    List<ChatMessage> selectByCustomerId(String customerId);
 }
